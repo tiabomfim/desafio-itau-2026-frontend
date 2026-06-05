@@ -1,0 +1,19 @@
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 10px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row mat-form-field {
+  flex: 1;
+}
+
+.address-row mat-form-field:first-child {
+  flex: 2;
+}

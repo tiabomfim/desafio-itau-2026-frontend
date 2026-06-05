@@ -1,0 +1,92 @@
+<div class="home-container">
+  <mat-card class="content-card">
+    <div class="header-row">
+      <div class="title-group">
+        <h1>Listagem de Pessoas</h1>
+        <p>Gerencie o cadastro de usuários e credenciais</p>
+      </div>
+      <button mat-raised-button color="primary" (click)="abrirModalCadastro()">
+        <mat-icon>person_add</mat-icon>
+        Cadastrar Pessoa
+      </button>
+    </div>
+
+    <div class="filter-row">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Pesquisar por nome</mat-label>
+        <input matInput placeholder="Digite um nome..." [formControl]="filtroNome" (keyup.enter)="pesquisar()">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <button mat-stroked-button color="primary" (click)="pesquisar()">Buscar</button>
+    </div>
+
+    @if (loading()) {
+      <div class="loading-shade">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
+    }
+
+    <div class="table-container">
+      <table mat-table [dataSource]="dadosPessoas()" matSort (matSortChange)="aoMudarOrdenacao($event)">
+        
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+          <td mat-cell *matCellDef="let pessoa"> {{pessoa.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Nome </th>
+          <td mat-cell *matCellDef="let pessoa"> {{pessoa.nome}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> E-mail </th>
+          <td mat-cell *matCellDef="let pessoa"> {{pessoa.email}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="login">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Login Gerado </th>
+          <td mat-cell *matCellDef="let pessoa">
+            <span class="login-badge">{{pessoa.login}}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cep">
+          <th mat-header-cell *matHeaderCellDef> CEP </th>
+          <td mat-cell *matCellDef="let pessoa"> {{pessoa.cep}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef class="text-center"> Ações </th>
+          <td mat-cell *matCellDef="let pessoa" class="text-center">
+            <button mat-icon-button color="accent" (click)="abrirModalEdicao(pessoa)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deletarPessoa(pessoa)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="colunasExibidas"></tr>
+        <tr mat-row *matRowDef="let row; columns: colunasExibidas;"></tr>
+      </table>
+
+      @if (dadosPessoas().length === 0 && !loading()) {
+        <div class="empty-state">
+          <mat-icon>people_outline</mat-icon>
+          <p>Nenhuma pessoa encontrada.</p>
+        </div>
+      }
+    </div>
+
+    <mat-paginator 
+      [length]="totalElementos()"
+      [pageSize]="tamanhoPagina()"
+      [pageSizeOptions]="[5, 10, 20]"
+      [pageIndex]="paginaAtual()"
+      (page)="aoMudarPagina($event)"
+      showFirstLastButtons>
+    </mat-paginator>
+  </mat-card>
+</div>

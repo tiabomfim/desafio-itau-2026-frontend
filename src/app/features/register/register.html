@@ -1,0 +1,101 @@
+<div class="auth-container">
+  <mat-card class="auth-card">
+
+    <div class="header">
+      <mat-icon class="logo" color="primary">person_add</mat-icon>
+      <h1>Criar Conta</h1>
+      <p>Preencha os dados abaixo para se cadastrar</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="cadastrar()">
+
+      @if (error()) {
+        <div class="error-message">
+          {{ error() }}
+        </div>
+      }
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nome Completo</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="nome"
+          placeholder="Seu nome completo">
+        <mat-icon matSuffix>person</mat-icon>
+        
+        @if (form.controls.nome.hasError('required') && form.controls.nome.touched) {
+          <mat-error>O nome completo é obrigatório.</mat-error>
+        }
+        @if (form.controls.nome.hasError('minlength') && form.controls.nome.touched) {
+          <mat-error>O nome deve conter pelo menos 3 caracteres.</mat-error>
+        }
+        @if (form.controls.nome.hasError('pattern') && form.controls.nome.touched) {
+          <mat-error>O nome deve conter apenas letras, sem acentos.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail</mat-label>
+        <input
+          matInput
+          type="email"
+          formControlName="email"
+          placeholder="usuario@email.com">
+        <mat-icon matSuffix>email</mat-icon>
+
+        @if (form.controls.email.hasError('required') && form.controls.email.touched) {
+          <mat-error>O e-mail é obrigatório.</mat-error>
+        }
+        @if (form.controls.email.hasError('email') && form.controls.email.touched) {
+          <mat-error>O formato do e-mail informado é inválido.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input
+          matInput
+          [type]="hidePassword() ? 'password' : 'text'"
+          formControlName="senha">
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          [disabled]="loading()"
+          (click)="togglePassword()">
+          <mat-icon>
+            {{ hidePassword() ? 'visibility_off' : 'visibility' }}
+          </mat-icon>
+        </button>
+
+        @if (form.controls.senha.hasError('required') && form.controls.senha.touched) {
+          <mat-error>A senha é obrigatória.</mat-error>
+        }
+        @if (form.controls.senha.hasError('minlength') && form.controls.senha.touched) {
+          <mat-error>A senha deve conter pelo menos 6 caracteres.</mat-error>
+        }
+      </mat-form-field>
+
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        class="auth-button"
+        [disabled]="loading() || form.invalid">
+        
+        @if (loading()) {
+          Cadastrando...
+        } @else {
+          Cadastrar
+        }
+      </button>
+
+      <div class="footer-actions">
+        <span>Já tem uma conta?</span>
+        <a routerLink="/login" class="auth-link">Faça login</a>
+      </div>
+
+    </form>
+  </mat-card>
+</div>

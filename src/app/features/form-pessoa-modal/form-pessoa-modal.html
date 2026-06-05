@@ -1,0 +1,71 @@
+<h2 mat-dialog-title>{{ data.pessoa ? 'Editar Registro' : 'Cadastrar Nova Pessoa' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="modal-form">
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Nome Completo</mat-label>
+      <input matInput formControlName="nome" placeholder="Ex: Maria Silva">
+      @if (form.controls['nome'].invalid && form.controls['nome'].touched) {
+        <mat-error>Nome inválido (apenas letras, de 3 a 150 caracteres).</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>CPF</mat-label>
+        <input matInput formControlName="cpf" placeholder="000.000.000-00" (input)="mascaraCpf($event)">
+        @if (form.controls['cpf'].invalid && form.controls['cpf'].touched) {
+          <mat-error>CPF obrigatório ou inválido.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data de Nascimento</mat-label>
+        <input matInput type="date" formControlName="dataNascimento">
+        @if (form.controls['dataNascimento'].invalid && form.controls['dataNascimento'].touched) {
+          <mat-error>A data deve ser anterior à data de hoje.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>E-mail</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="nome@email.com">
+      @if (form.controls['email'].invalid && form.controls['email'].touched) {
+        <mat-error>Insira um formato de e-mail válido.</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="form-row address-row">
+      <mat-form-field appearance="outline">
+        <mat-label>CEP</mat-label>
+        <input matInput formControlName="cep" placeholder="00000-000" (input)="mascaraCep($event)">
+        @if (form.controls['cep'].invalid && form.controls['cep'].touched) {
+          <mat-error>CEP obrigatório ou incompleto.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Número</mat-label>
+        <input matInput formControlName="numero" placeholder="Ex: 123">
+        @if (form.controls['numero'].invalid && form.controls['numero'].touched) {
+          <mat-error>O número é obrigatório.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Complemento (Opcional)</mat-label>
+      <input matInput formControlName="complemento" placeholder="Ex: Apto 45 Bloco B">
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()" [disabled]="salvando()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="salvar()" [disabled]="form.invalid || salvando()">
+    {{ salvando() ? 'Salvando...' : 'Confirmar' }}
+  </button>
+</mat-dialog-actions>

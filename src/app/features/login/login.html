@@ -1,0 +1,83 @@
+<div class="auth-container">
+  <mat-card class="auth-card">
+
+    <div class="header">
+      <mat-icon class="logo" color="primary">people</mat-icon>
+      <h1>Cadastro App</h1>
+      <p>Faça login para continuar</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="entrar()">
+
+      @if (error()) {
+        <div class="error-message">
+          {{ error() }}
+        </div>
+      }
+
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail</mat-label>
+        <input
+          matInput
+          type="email"
+          formControlName="email"
+          placeholder="usuario@email.com">
+        <mat-icon matSuffix>email</mat-icon>
+
+        @if (form.controls.email.hasError('required') && form.controls.email.touched) {
+          <mat-error>Informe o e-mail</mat-error>
+        }
+        @if (form.controls.email.hasError('email') && form.controls.email.touched) {
+          <mat-error>E-mail inválido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input
+          matInput
+          [type]="hidePassword() ? 'password' : 'text'"
+          formControlName="senha">
+
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          [disabled]="loading()"
+          (click)="togglePassword()">
+          <mat-icon>
+            {{ hidePassword() ? 'visibility_off' : 'visibility' }}
+          </mat-icon>
+        </button>
+
+        @if (form.controls.senha.hasError('required') && form.controls.senha.touched) {
+          <mat-error>Informe a senha</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-checkbox [disabled]="loading()">
+        Lembrar-me
+      </mat-checkbox>
+
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        class="auth-button"
+        [disabled]="loading() || form.invalid">
+
+        @if (loading()) {
+          Entrando...
+        } @else {
+          Entrar
+        }
+      </button>
+
+      <div class="footer-actions">
+        <span>Não tem uma conta?</span>
+        <a routerLink="/login/register" class="auth-link">Cadastre-se</a>
+      </div>
+
+    </form>
+  </mat-card>
+</div>

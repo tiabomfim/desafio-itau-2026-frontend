@@ -1,0 +1,104 @@
+.home-container {
+  padding: 32px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+.content-card {
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  position: relative;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title-group h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.title-group p {
+  margin: 4px 0 0 0;
+  color: #6b7280;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 400px;
+}
+
+mat-form-field .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}
+
+.table-container {
+  position: relative;
+  overflow-x: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+table {
+  width: 100%;
+}
+
+.login-badge {
+  background-color: #e8eaf6;
+  color: #3f51b5;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px;
+  color: #9ca3af;
+}
+
+.empty-state mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+}
+
+mat-paginator {
+  margin-top: 12px;
+  border-radius: 0 0 16px 16px;
+}
