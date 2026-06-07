@@ -1,309 +1,261 @@
-# Cadastro de Pessoas
+# Desafio Técnico - Cadastro de Pessoas (Front-end)
 
-Aplicação frontend em Angular para autenticação de usuários e gerenciamento de pessoas. O projeto oferece fluxo de login, cadastro de conta, listagem paginada de pessoas e operações de criação, edição e remoção por meio de integração com uma API HTTP.
+[![Status](https://img.shields.io/badge/status-concluído-brightgreen)]()
+[![Angular](https://img.shields.io/badge/Angular-21-red)]()
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)]()
+[![Angular Material](https://img.shields.io/badge/Angular_Material-UI-purple)]()
 
-## Visão Geral
+Aplicação SPA desenvolvida para o processo seletivo de **Engenharia de Software Jr.** O projeto foi construído com foco em experiência do usuário, validações robustas, autenticação segura e integração com uma API REST desenvolvida em Java/Spring Boot.
 
-Este projeto foi construído com Angular standalone components e Angular Material. A aplicação consome um backend local em `http://localhost:8080`, usa autenticação baseada em token e protege a área principal com guarda de rota.
+---
 
-Fluxo principal:
+## 🏗 Arquitetura do Sistema
 
-1. O usuário acessa `/login`.
-2. Faz login ou cria uma conta em `/login/register`.
-3. Após autenticar, é redirecionado para `/home`.
-4. Em `/home`, pode pesquisar, paginar, ordenar, cadastrar, editar e excluir pessoas.
+O projeto foi estruturado seguindo boas práticas de desenvolvimento Front-end para garantir escalabilidade, organização e manutenção simplificada.
 
-## Stack
+* **Framework:** Angular 21
+* **Linguagem:** TypeScript
+* **UI Framework:** Angular Material
+* **Arquitetura:** Standalone Components
+* **Gerenciamento de Estado:** Angular Signals
+* **Formulários:** Reactive Forms
+* **Segurança:** JWT (JSON Web Token)
+* **Comunicação:** HTTP Client + REST API
 
-- Angular 21
-- TypeScript 5
-- Angular Material
-- RxJS
-- Vitest
-- Prettier
-
-## Funcionalidades
-
-- Login com validação de formulário
-- Cadastro de usuário
-- Proteção de rota com `authGuard`
-- Interceptor HTTP para envio automático do token JWT
-- Listagem paginada de pessoas
-- Filtro por nome
-- Ordenação por coluna
-- Cadastro e edição em modal
-- Exclusão com confirmação
-- Feedback visual com `MatSnackBar`
-
-## Rotas da Aplicação
-
-| Rota | Descrição | Proteção |
-| --- | --- | --- |
-| `/login` | Tela de autenticação | Não |
-| `/login/register` | Tela de cadastro de usuário | Não |
-| `/home` | Listagem e gestão de pessoas | Sim |
-
-## Integração com Backend
-
-O frontend depende de uma API rodando localmente em `http://localhost:8080`.
-
-### Endpoints de autenticação
-
-Base URL: `http://localhost:8080/api/auth`
-
-- `POST /login`
-- `POST /register`
-
-Payload esperado no login:
-
-```json
-{
-  "email": "usuario@email.com",
-  "senha": "123456"
-}
-```
-
-Resposta esperada:
-
-```json
-{
-  "token": "jwt-ou-token-equivalente"
-}
-```
-
-### Endpoints de pessoas
-
-Base URL: `http://localhost:8080/api/pessoas`
-
-- `GET /api/pessoas?page=0&size=10&sort=nome,asc&nome=abc`
-- `GET /api/pessoas/{id}`
-- `POST /api/pessoas`
-- `PUT /api/pessoas/{id}`
-- `DELETE /api/pessoas/{id}`
-
-Formato esperado da listagem:
-
-```json
-{
-  "content": [
-    {
-      "id": 1,
-      "nome": "Maria Silva",
-      "email": "maria@email.com",
-      "login": "maria.silva",
-      "cep": "01001000"
-    }
-  ],
-  "totalElements": 1
-}
-```
-
-## Autenticação
-
-O token retornado no login é salvo no `localStorage` com a chave `access_token`.
-
-Comportamento atual:
-
-- O `authGuard` bloqueia acesso à rota `/home` quando não há token salvo.
-- O `authInterceptor` adiciona o header `Authorization: Bearer <token>` em requisições autenticadas.
-- O logout remove o token local e redireciona para `/login`.
-
-## Estrutura do Projeto
+### Estrutura do Projeto
 
 ```text
 src/
-  app/
-    app.config.ts
-    app.ts
-    core/
-      guard/
-      interceptor/
-      service/
-    features/
-      form-pessoa-modal/
-      home/
-      login/
-      register/
-    routes/
-      app.routes.ts
-      auth.routes.ts
-      home.routes.ts
-  main.ts
-  material-theme.scss
-  styles.css
+├── app/
+│   ├── core/
+│   │   ├── guard/
+│   │   ├── interceptor/
+│   │   └── service/
+│   │
+│   ├── features/
+│   │   ├── login/
+│   │   ├── register/
+│   │   ├── home/
+│   │   └── form-pessoa-modal/
+│   │
+│   ├── app.routes.ts
+│   ├── auth.routes.ts
+│   └── home.routes.ts
+│
+└── assets/
 ```
 
-## Componentes e Responsabilidades
+---
 
-### `src/app/features/login`
+## 🚀 Funcionalidades
 
-- Tela de login
-- Validação de e-mail e senha
-- Chamada ao `AuthService.login`
-- Redirecionamento para `/home`
+### 🔐 Autenticação
 
-### `src/app/features/register`
+- Login com JWT
+- Armazenamento seguro do token
+- Controle de acesso por Auth Guard
+- Logout seguro
 
-- Cadastro de usuário
-- Validação de nome, e-mail e senha
-- Chamada ao `AuthService.register`
-- Redirecionamento para `/login`
+### 👤 Cadastro de Usuários
 
-### `src/app/features/home`
+- Cadastro dividido em etapas (Stepper)
+- Dados pessoais
+- Endereço
+- Credenciais de acesso
 
-- Tela principal autenticada
-- Busca por nome
+### 📍 Integração com ViaCEP
+
+- Consulta automática do CEP
+- Preenchimento automático de:
+  - Cidade
+  - UF
+  - Endereço
+
+### 📄 Gestão de Pessoas
+
+- Cadastro
+- Edição
+- Exclusão
+- Pesquisa por nome
 - Paginação
 - Ordenação
-- Exclusão de registro
-- Abertura de modal para cadastro e edição
 
-### `src/app/features/form-pessoa-modal`
+### ✅ Validações
 
-- Formulário de criação e edição de pessoa
-- Máscara de CPF e CEP
-- Persistência via `PessoaService`
+- CPF obrigatório
+- CEP obrigatório
+- E-mail válido
+- Senha mínima de 6 caracteres
+- Campos obrigatórios com feedback visual
 
-### `src/app/core/service/auth.service.ts`
+### 🎨 Interface
 
-- Login
-- Registro
-- Logout
-- Consulta do token
-- Estado simples de autenticação
+- Angular Material
+- Layout responsivo
+- Feedback visual com SnackBars
+- Modais para cadastro e edição
 
-### `src/app/core/service/pessoas.service.ts`
+---
 
-- Listagem paginada
-- Busca por ID
-- Cadastro
-- Atualização
-- Exclusão
+## 🛠 Como Executar
 
-## Pré-requisitos
+### Pré-requisitos
 
-- Node.js LTS
-- npm
+- Node.js 22+ ou superior
+- Angular CLI
 
-Versão recomendada:
+Instalação da CLI:
 
-- Node.js `22.x` ou `24.x`
+```bash
+npm install -g @angular/cli
+```
 
-Evite usar versões ímpares do Node em ambiente local de build, porque o Angular CLI pode apresentar comportamento instável fora das versões LTS.
+---
 
-## Instalação
+## ▶ Executando o Projeto
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/seu-repositorio.git
+```
+
+### 2. Acesse a pasta
+
+```bash
+cd frontend
+```
+
+### 3. Instale as dependências
 
 ```bash
 npm install
 ```
 
-## Execução em Desenvolvimento
+### 4. Execute o projeto
+
+```bash
+ng serve
+```
+
+ou
 
 ```bash
 npm start
 ```
 
-Depois, acesse:
+A aplicação estará disponível em:
 
 ```text
 http://localhost:4200
 ```
 
-## Build
+---
 
-```bash
-npm run build
+## 🔗 Integração com API
+
+O sistema consome uma API REST disponível em:
+
+```text
+http://localhost:8080
 ```
 
-Build de desenvolvimento com watch:
+### Endpoints Utilizados
 
-```bash
-npm run watch
+| Método | Endpoint | Descrição |
+|----------|----------|------------|
+| POST | /api/auth/login | Autenticação |
+| POST | /api/auth/register | Cadastro de usuário |
+| GET | /api/pessoas | Listagem paginada |
+| GET | /api/pessoas/{id} | Busca por ID |
+| POST | /api/pessoas | Novo cadastro |
+| PUT | /api/pessoas/{id} | Atualização |
+| DELETE | /api/pessoas/{id} | Remoção |
+
+---
+
+## 🔒 Segurança
+
+O projeto implementa autenticação baseada em JWT.
+
+### Fluxo
+
+1. Usuário realiza login.
+2. API retorna o token JWT.
+3. Token é armazenado localmente.
+4. Interceptor adiciona automaticamente o token nas requisições.
+5. Auth Guard protege rotas privadas.
+
+---
+
+## 🧪 Qualidade e Diferenciais
+
+### Código
+
+- TypeScript Strict Mode
+- Standalone Components
+- Angular Signals
+- Reactive Forms
+- Clean Code
+- Separação de responsabilidades
+
+### Experiência do Usuário
+
+- Máscaras para CPF e CEP
+- Mensagens amigáveis de erro
+- Feedback visual instantâneo
+- Navegação intuitiva
+
+### Arquitetura
+
+- Organização por Features
+- Serviços desacoplados
+- Rotas protegidas
+- Componentes reutilizáveis
+
+---
+
+## 📸 Evidências
+
+As evidências dos testes executados encontram-se na pasta:
+
+```text
+/docs/evidencias
 ```
 
-## Testes
+### Cenários Testados
 
-```bash
-npm test
-```
+- Login
+- Cadastro de Usuário
+- Consulta ViaCEP
+- Cadastro de Pessoa
+- Edição de Pessoa
+- Exclusão de Pessoa
+- Paginação
+- Ordenação
+- Validações
 
-## Configurações Relevantes
+---
 
-### `angular.json`
+## 👤 Autora
 
-- Builder de aplicação: `@angular/build:application`
-- Entry point: `src/main.ts`
-- Styles globais:
-  - `src/material-theme.scss`
-  - `src/styles.css`
+**Rafaela Bomfim**
 
-### `tsconfig.json`
+- GitHub: https://github.com/tiabomfim
+- LinkedIn: https://linkedin.com/in/rafaelabomfim
 
-O projeto usa configuração estrita, incluindo:
+---
 
-- `strict`
-- `noImplicitOverride`
-- `noImplicitReturns`
-- `noFallthroughCasesInSwitch`
-- `noPropertyAccessFromIndexSignature`
+### Tecnologias Utilizadas
 
-Isso significa que mudanças em formulários, templates e tipagem devem respeitar regras mais rígidas de compilação.
+- Angular 21
+- TypeScript
+- Angular Material
+- RxJS
+- JWT
+- HTML5
+- CSS3
 
-## Padrões do Projeto
+---
 
-- Componentes standalone
-- Lazy loading de rotas
-- Services para acesso a dados
-- Guard para proteção de navegação
-- Interceptor para autenticação
-- Signals do Angular para estado simples de UI
-
-## Campos do Cadastro de Pessoa
-
-O modal de pessoa trabalha com os seguintes campos:
-
-- `nome`
-- `cpf`
-- `email`
-- `dataNascimento`
-- `cep`
-- `numero`
-- `complemento`
-
-Regras de validação atuais:
-
-- Nome: obrigatório, mínimo de 3 caracteres, máximo de 150
-- CPF: obrigatório, aceita com ou sem máscara
-- E-mail: obrigatório e válido
-- Data de nascimento: obrigatória
-- CEP: obrigatório, aceita com ou sem máscara
-- Número: obrigatório
-- Complemento: opcional
-
-## Observações Importantes
-
-- O frontend está acoplado a URLs locais fixas no código para autenticação e pessoas.
-- Não existe, neste momento, uso de arquivo de ambiente para trocar `baseUrl`.
-- O projeto depende de o backend retornar mensagens de erro em `err.error.mensagem` para exibição amigável.
-
-## Melhorias Recomendadas
-
-- Externalizar a URL da API para `environment`
-- Tipar melhor as respostas da API
-- Padronizar modelos/interfaces de domínio
-- Adicionar testes unitários para services, guard e interceptor
-- Adicionar tratamento global de erro HTTP
-- Implementar refresh token, se necessário
-
-## Scripts Disponíveis
-
-```bash
-npm start
-npm run build
-npm run watch
-npm test
-```
-
-## Licença
-
-Uso interno ou conforme a política definida pelo mantenedor do projeto.
+*Desenvolvido para o desafio técnico de Engenharia de Software Jr., aplicando boas práticas de desenvolvimento Front-end, arquitetura moderna Angular e integração com APIs REST.*
