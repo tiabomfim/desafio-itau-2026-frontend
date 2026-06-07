@@ -215,14 +215,6 @@ O projeto implementa autenticação baseada em JWT.
 
 ---
 
-## 📸 Evidências
-
-As evidências dos testes executados encontram-se na pasta:
-
-```text
-/docs/evidencias
-```
-
 ### Cenários Testados
 
 - Login
